@@ -1,0 +1,7 @@
+https://rtmp.djicdn.com/robomaster/ual2024-sz-output_ud.m3u8?auth_key=1722341892-0-0-1e3d950d1e12f901101b59e3d53fa0b1
+https://rtmp.djicdn.com/robomaster/ual2024-sz-bh_ud.m3u8?auth_key=1721362412-0-0-7c71a59d9ed6fa1d9fb497713aabc904
+https://rtmp.djicdn.com/robomaster/ual2024-sz-bp_ud.m3u8?auth_key=1721362412-0-0-f83f387a74d0cfdabcb02c7807cb3274
+https://rtmp.djicdn.com/robomaster/ual2024-sz-b3_ud.m3u8?auth_key=1721362412-0-0-4e90f48c0384dddb62e145dc5d82778a
+https://rtmp.djicdn.com/robomaster/ual2024-sz-b4_ud.m3u8?auth_key=1721362412-0-0-0b8907df05ee1ce6fd4d94a9ed0b4540
+https://rtmp.djicdn.com/robomaster/ual2024-sz-b5_ud.m3u8?auth_key=1721362412-0-0-68b119f7b4a01714df481b679a980671
+https://rtmp.djicdn.com/robomaster/ual2024-sz-ba_ud.m3u8?auth_key=1721362412-0-0-7f5bcb258c6a0ba45ae5f1588b79888b
