@@ -27,7 +27,6 @@ def update_json():
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(new_data, f, ensure_ascii=False, indent=4)
 
-
 # 下载任务列表
 processes = []
 downloading = False
@@ -64,7 +63,6 @@ def file_list():
                 files.append((fpv['role'],src))
     return files
 
-
 def start_downloads():
     global processes,files
     # 创建并行下载的 subprocess 任务
@@ -93,7 +91,6 @@ def stop_downloads():
         process.wait()
     print("所有下载任务已停止。")
     processes = []
-
 
 def on_closing():
     if downloading:
