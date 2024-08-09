@@ -6,6 +6,7 @@ from datetime import datetime
 import urllib.request
 import json
 
+hint_text = "文件前缀"
 json_url = 'https://pro-robomasters-hz-n5i3.oss-cn-hangzhou.aliyuncs.com/live_json/live_game_info.json'
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -65,16 +66,23 @@ def file_list():
 
 def start_downloads():
     global processes,files
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_folder = os.path.join(script_dir,'output', timestamp)
+    os.makedirs(output_folder, exist_ok=True)
+
+    # 设置录制文件前缀
+    game_info = text_entry.get()
+    if game_info == hint_text:
+        game_info = ''
+    if game_info != '':
+        game_info = game_info+'_'
+
     # 创建并行下载的 subprocess 任务
     processes = []
     files = file_list()
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_folder = os.path.join('output', timestamp)
-    os.makedirs(output_folder, exist_ok=True)
-
     for file in files:
-        output_file = file[0]+'.mp4'
+        output_file = game_info+file[0]+'.mp4'
         cmd = [ffmpeg_path,'-i', file[1], '-c','copy',os.path.join(output_folder, output_file)]
         process = subprocess.Popen(cmd,stdin=subprocess.PIPE)
         processes.append(process)
@@ -129,6 +137,23 @@ radio2.grid(row=1, column=1, padx=5, pady=5, sticky='ew')
 
 download_button = tk.Button(frame, text="开始录制", command=start_stop_downloads)
 download_button.grid(row=2, column=0, columnspan=2,padx=10,pady=10, sticky='ew')
+
+def on_entry_focus_in(event):
+    if text_entry.get() == hint_text:
+        text_entry.delete(0, tk.END)
+        text_entry.config(fg='black')
+
+def on_entry_focus_out(event):
+    if text_entry.get() == "":
+        text_entry.insert(0, hint_text)
+        text_entry.config(fg='grey')
+
+# 添加单行文本框
+text_entry = tk.Entry(frame, fg='grey')
+text_entry.insert(0, hint_text)
+text_entry.bind("<FocusIn>", on_entry_focus_in)
+text_entry.bind("<FocusOut>", on_entry_focus_out)
+text_entry.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky='ew')
 
 # 设置窗口关闭时的处理函数
 root.protocol("WM_DELETE_WINDOW", on_closing)
