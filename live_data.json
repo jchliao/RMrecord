@@ -1,0 +1,313 @@
+{
+    "zoneName": "全国赛",
+    "zoneLiveString": [
+        {
+            "label": "1080p",
+            "type": "application/vnd.apple.mpegurl",
+            "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-output.m3u8?auth_key=1722341892-0-0-0b97a8f1268fcf34fa3ac3b6bfa106b0",
+            "res": "high"
+        },
+        {
+            "label": "720p",
+            "type": "application/vnd.apple.mpegurl",
+            "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-output_ud.m3u8?auth_key=1722341892-0-0-1e3d950d1e12f901101b59e3d53fa0b1",
+            "res": "middle"
+        },
+        {
+            "label": "540p",
+            "type": "application/vnd.apple.mpegurl",
+            "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-output_hd.m3u8?auth_key=1722341892-0-0-58850b52fd2708a21ed91e106b8d58c4",
+            "res": "low"
+        }
+    ],
+    "fpvData": [
+        {
+            "role": "红方英雄",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/3a3cf93e01e181722344147632190453.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rh.m3u8?auth_key=1721362412-0-0-dce8a406d213a9de897c7fc16b315527",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rh_ud.m3u8?auth_key=1721362412-0-0-7bc88984d150bde8cd27f2ce5e1d639c",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rh_hd.m3u8?auth_key=1721362412-0-0-a71bdce5d7cd30cf67727c07e47694bb",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝方英雄",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/30e277c87c2cc1722344171713191709.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bh.m3u8?auth_key=1721362412-0-0-5a7cdc9caf199233001b593c77e55fcd",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bh_ud.m3u8?auth_key=1721362412-0-0-7c71a59d9ed6fa1d9fb497713aabc904",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bh_hd.m3u8?auth_key=1721362412-0-0-ad2286b80f84991ede5d0360daf00fa6",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "红方工程",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/7b4282f6b10111722344218086738870.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rp.m3u8?auth_key=1721362412-0-0-dac22b469e52709bea941f2700ea7721",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rp_ud.m3u8?auth_key=1721362412-0-0-9880c391cfa0ff7461f4b98845cf8608",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-rp_hd.m3u8?auth_key=1721362412-0-0-b56a85220b01e48980494e15730fd16c",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝方工程",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/b7707684a6504172234422125921589.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bp.m3u8?auth_key=1721362412-0-0-f5228019238ec42417d332559e041783",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bp_ud.m3u8?auth_key=1721362412-0-0-f83f387a74d0cfdabcb02c7807cb3274",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-bp_hd.m3u8?auth_key=1721362412-0-0-a1e6bff56cc5de9a188a1f3377bf0475",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "红3步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/59f3c965adc0d1722344278540895797.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r3.m3u8?auth_key=1721362412-0-0-05d1b2ea6edb6ee7d1c58c341b32365c",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r3_ud.m3u8?auth_key=1721362412-0-0-16d1f86a0536d10e2a40368cd4b49700",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r3_hd.m3u8?auth_key=1721362412-0-0-a689a22d4208a3dddb684111dd92fa86",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝3步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/26a81003ed0f61722344297123554842.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b3.m3u8?auth_key=1721362412-0-0-25aa2a4bedbfca4e8350482b30be7eb4",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b3_ud.m3u8?auth_key=1721362412-0-0-4e90f48c0384dddb62e145dc5d82778a",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b3_hd.m3u8?auth_key=1721362412-0-0-1aca61ce6937dbb3dbea20afc76ea707",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "红4步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/0a4a1abe48151722344401786831000.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r4.m3u8?auth_key=1721362412-0-0-27f19efc5061e8cdc2f96fd6206a5824",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r4_ud.m3u8?auth_key=1721362412-0-0-f41a9e86afa393b9d87495d0a67d4ab4",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r4_hd.m3u8?auth_key=1721362412-0-0-9fd82941bd77e307d025008475fc023b",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝4步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/e13ef491f9f9e1722344421195807936.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b4.m3u8?auth_key=1721362412-0-0-9eaf3e3c947784ed7fc1c5eff679fbac",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b4_ud.m3u8?auth_key=1721362412-0-0-0b8907df05ee1ce6fd4d94a9ed0b4540",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b4_hd.m3u8?auth_key=1721362412-0-0-808392bb78ff97532a6570e737d2f799",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "红5步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/920fc01e3d519172234446490766258.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r5.m3u8?auth_key=1721362412-0-0-d7164364aa120560b186d35d4fcfb4fa",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r5_ud.m3u8?auth_key=1721362412-0-0-38f0d4149689365016539ac31e240af3",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-r5_hd.m3u8?auth_key=1721362412-0-0-50b1ce016a8f15dd9309bb0610a57dcf",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝5步兵",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/1717fd1b3c03c1722344488591339629.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b5.m3u8?auth_key=1721362412-0-0-7b9fae66f122e4abb431e7c5b9ccf9b4",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b5_ud.m3u8?auth_key=1721362412-0-0-68b119f7b4a01714df481b679a980671",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-b5_hd.m3u8?auth_key=1721362412-0-0-af943636a396db58b81c13eeb1cc4a74",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "红方空中",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/8db3f928f35fb1722344531186435692.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ra.m3u8?auth_key=1721362412-0-0-cda3572236ad706401b640aaf75f8942",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ra_ud.m3u8?auth_key=1721362412-0-0-f94a5551bf415e7702c964bf8b58602a",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ra_hd.m3u8?auth_key=1721362412-0-0-5a60a6f42d630b427aaccd3a850b8da0",
+                    "res": "low"
+                }
+            ]
+        },
+        {
+            "role": "蓝方空中",
+            "headimg": "https://rm-static.djicdn.com/tem/68659/f89775fe399791722344546466112245.png",
+            "sources": [
+                {
+                    "label": "1080p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ba.m3u8?auth_key=1721362412-0-0-cbb9bbf591512665687d16505213e2e3",
+                    "res": "high"
+                },
+                {
+                    "label": "720p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ba_ud.m3u8?auth_key=1721362412-0-0-7f5bcb258c6a0ba45ae5f1588b79888b",
+                    "res": "middle"
+                },
+                {
+                    "label": "540p",
+                    "type": "application/vnd.apple.mpegurl",
+                    "src": "https://rtmp.djicdn.com/robomaster/ual2024-sz-ba_hd.m3u8?auth_key=1721362412-0-0-5f6759139e3a655abf9d931d335a881d",
+                    "res": "low"
+                }
+            ]
+        }
+    ]
+}
