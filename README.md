@@ -13,5 +13,16 @@ python record.py
 
 - 停止录制
 
-
 视频将保存到 output 文件夹中
+
+
+
+## 打包
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+pip install pyinstaller
+pyinstaller -w -F --add-data ".\\icon.ico;." --add-data ".\\bin\\*;.\\bin" -i .\icon.ico record.py
+```
+

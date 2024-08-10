@@ -18,7 +18,7 @@ else:
     base_path = script_dir
 
 json_path = os.path.join(script_dir,'live_data.json')
-ffmpeg_path = os.path.join(script_dir,'bin','ffmpeg.exe')
+ffmpeg_path = os.path.join(base_path,'bin','ffmpeg.exe')
 
 def update_json():
     with urllib.request.urlopen(json_url) as response:
