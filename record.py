@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import subprocess
 import os
+import sys
 from datetime import datetime
 import urllib.request
 import json
@@ -9,7 +10,13 @@ import json
 hint_text = "文件前缀"
 json_url = 'https://pro-robomasters-hz-n5i3.oss-cn-hangzhou.aliyuncs.com/live_json/live_game_info.json'
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys,'frozen',False):
+    script_dir = os.path.dirname(os.path.abspath(sys.executable))
+    base_path = sys._MEIPASS
+else:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    base_path = script_dir
+
 json_path = os.path.join(script_dir,'live_data.json')
 ffmpeg_path = os.path.join(script_dir,'bin','ffmpeg.exe')
 
@@ -27,6 +34,9 @@ def update_json():
         # 保存到文件
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(new_data, f, ensure_ascii=False, indent=4)
+
+if not os.path.exists(json_path):
+    update_json()
 
 # 下载任务列表
 processes = []
@@ -65,7 +75,10 @@ def file_list():
     return files
 
 def start_downloads():
-    global processes,files
+    global processes
+
+    files = file_list()
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_folder = os.path.join(script_dir,'output', timestamp)
     os.makedirs(output_folder, exist_ok=True)
@@ -79,12 +92,11 @@ def start_downloads():
 
     # 创建并行下载的 subprocess 任务
     processes = []
-    files = file_list()
 
     for file in files:
         output_file = game_info+file[0]+'.mp4'
         cmd = [ffmpeg_path,'-i', file[1], '-c','copy',os.path.join(output_folder, output_file)]
-        process = subprocess.Popen(cmd,stdin=subprocess.PIPE)
+        process = subprocess.Popen(cmd,stdin=subprocess.PIPE,creationflags=subprocess.CREATE_NO_WINDOW)
         processes.append(process)
 
 def stop_downloads():
@@ -108,7 +120,8 @@ def on_closing():
 
 # 创建主窗口
 root = tk.Tk()
-root.title("record")
+root.iconbitmap(os.path.join(base_path,'icon.ico'))
+root.title("RMrecord")
 root.resizable(width=False, height=False)
 
 # 创建菜单栏
