@@ -6,13 +6,20 @@ import sys
 from datetime import datetime
 import urllib.request
 import json
+import ctypes
+
+if sys.platform == "win32":
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+    except Exception:
+        pass
 
 hint_text = "文件前缀"
 json_url = 'https://pro-robomasters-hz-n5i3.oss-cn-hangzhou.aliyuncs.com/live_json/live_game_info.json'
 
 if getattr(sys,'frozen',False):
     script_dir = os.path.dirname(os.path.abspath(sys.executable))
-    base_path = sys._MEIPASS
+    base_path = sys._MEIPASS # type: ignore
 else:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_path = script_dir
