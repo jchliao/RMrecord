@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk,messagebox
 import subprocess
 import os
 import sys
@@ -7,6 +7,7 @@ from datetime import datetime
 import urllib.request
 import json
 import ctypes
+import shutil
 
 if sys.platform == "win32":
     try:
@@ -15,7 +16,8 @@ if sys.platform == "win32":
         pass
 
 hint_text = "文件前缀"
-json_url = 'https://pro-robomasters-hz-n5i3.oss-cn-hangzhou.aliyuncs.com/live_json/live_game_info.json'
+live_game_info = 'https://rm-static.djicdn.com/live_json/live_game_info.json'
+current_and_next_matches = 'https://rm-static.djicdn.com/live_json/current_and_next_matches.json'
 
 if getattr(sys,'frozen',False):
     script_dir = os.path.dirname(os.path.abspath(sys.executable))
@@ -24,16 +26,52 @@ else:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_path = script_dir
 
-json_path = os.path.join(script_dir,'live_data.json')
-ffmpeg_path = os.path.join(base_path,'bin','ffmpeg.exe')
+def find_ffmpeg():
+    ffmpeg_path = shutil.which('ffmpeg')
+    if ffmpeg_path:
+        return ffmpeg_path
+    exe_name = 'ffmpeg.exe' if os.name == 'nt' else 'ffmpeg'
+    local_paths = [
+        os.path.join(base_path, exe_name),
+        os.path.join(base_path, 'bin', exe_name),
+    ]
+    for path in local_paths:
+        if os.path.isfile(path) and os.access(path, os.X_OK):
+            return path
+    messagebox.showerror("错误", "未找到 ffmpeg，请确保其已安装并添加到系统环境变量")
+    sys.exit(1)
 
-def download_json():
-    with urllib.request.urlopen(json_url) as response:
+# 在初始化时查找 ffmpeg 路径
+ffmpeg_path = find_ffmpeg()
+json_path = os.path.join(script_dir,'live_data.json')
+
+def download_json(url):
+    with urllib.request.urlopen(url) as response:
         response_data = response.read()
         return json.loads(response_data)
 
+def get_current_matche():
+    data = download_json(current_and_next_matches)
+    round_number = None
+    for item in data:
+        current_match = item.get("currentMatch")
+        if current_match:
+            order_number = current_match.get("orderNumber")
+            round_number = current_match.get("round")
+            blue_team = current_match["blueSide"]["player"]["team"]
+            red_team = current_match["redSide"]["player"]["team"]
+    if round_number is None:
+        messagebox.showwarning('提示','当前可能没有进行中的比赛')
+        return
+    match_info = f"第{int(order_number):02}场.{red_team['collegeName']}.{red_team['name']}.vs.{blue_team['collegeName']}.{blue_team['name']}.第{round_number}局"
+    match_info = match_info.replace('（', '(').replace('）', ')')
+    text_entry.delete(0, tk.END)
+    text_entry.insert(0, match_info)
+    text_entry.config(fg='black')
+    return
+
 def update_json():
-    data = download_json()
+    data = download_json(live_game_info)
     event_list = data['eventData']
     has_live = any(event.get('liveState') == 1 for event in event_list)
     data = data['eventData'][0]
@@ -79,34 +117,46 @@ def file_list():
         zonelive = data['zoneLiveString']
         src = find_src_by_label(zonelive,resolution)
         if main_view_var.get():
-            files.append(('主视角', src))
+            files.append(('全场', src))
         for fpv in data['fpvData']:
             role = fpv['role']
-            if red_team_var.get() and "红" in role:
-                src = find_src_by_label(fpv['sources'], resolution)
-                files.append((role, src))
-            elif blue_team_var.get() and "蓝" in role:
-                src = find_src_by_label(fpv['sources'], resolution)
-                files.append((role, src))
-            elif base_view_var.get() and "号机" in role:
-                src = find_src_by_label(fpv['sources'], resolution)
-                files.append((role, src))
+            if "半场" in role:
+                if base_view_var.get():
+                    src = find_src_by_label(fpv['sources'], resolution)
+                    files.append((role, src))
+            else:
+                if "红" in role and red_team_var.get():
+                    src = find_src_by_label(fpv['sources'], resolution)
+                    files.append((role, src))
+                elif "蓝" in role and blue_team_var.get():
+                    src = find_src_by_label(fpv['sources'], resolution)
+                    files.append((role, src))
     return files
+
+def get_unique_folder(base_dir,out_dir,folder_name):
+    output_folder = os.path.join(base_dir, out_dir, folder_name)
+    counter = 1
+    unique_folder = output_folder
+    while os.path.exists(unique_folder):
+        unique_folder = f"{output_folder}_{counter}"
+        counter += 1
+    os.makedirs(unique_folder)
+    return unique_folder
 
 def start_downloads():
     global processes
     files = file_list()
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_folder = os.path.join(script_dir,'output', timestamp)
-    os.makedirs(output_folder, exist_ok=True)
+    dirmane = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     # 设置录制文件前缀
     game_info = text_entry.get()
     if game_info == hint_text:
         game_info = ''
     if game_info != '':
+        dirmane = game_info.split('.')[0]
         game_info = game_info+'_'
-
+    output_folder = get_unique_folder(script_dir,'output', dirmane)
+    os.makedirs(output_folder, exist_ok=True)
     # 创建并行下载的 subprocess 任务
     processes = []
     for file in files:
@@ -142,6 +192,13 @@ def center_window(root):
     x = (screen_width // 2) - (window_width // 2)
     y = (screen_height // 2) - (window_height // 2)
     root.geometry(f"+{x}+{y}")
+    root.minsize(window_width, window_height)
+    rows = frame.grid_size()[1]
+    for i in range(rows):
+        frame.grid_rowconfigure(i, weight=1)
+    columns = frame.grid_size()[0]
+    for i in range(columns):
+        frame.grid_columnconfigure(i, weight=1)
 
 # 创建主窗口
 root = tk.Tk()
@@ -149,13 +206,15 @@ root.withdraw()
 root.title("RMrecord")
 root.iconbitmap(os.path.join(base_path,'icon.ico'))
 root.resizable(width=False, height=False)
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
 # 创建菜单栏
 menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
 menu_bar.add_command(label="更新 JSON", command=update_json)
-
+menu_bar.add_command(label="获取比赛信息", command=get_current_matche)
 frame = tk.Frame(root)
-frame.grid(row=0, column=0, padx=25, pady=10,sticky='nsew')  # 使用 grid 布局
+frame.grid(row=0, column=0, padx=28, pady=10,sticky='nsew')  # 使用 grid 布局
 
 # 创建下拉选择控件
 resolution_combobox = ttk.Combobox(frame, values=["540p", "720p", "1080p"])
@@ -167,16 +226,16 @@ red_team_var = tk.BooleanVar()
 blue_team_var = tk.BooleanVar()
 base_view_var = tk.BooleanVar()
 
-main_view_check = tk.Checkbutton(frame, text="主视角", variable=main_view_var, anchor='w')
+main_view_check = tk.Checkbutton(frame, text="全场", variable=main_view_var, anchor='w')
 main_view_check.grid(row=1, column=0, padx=5, pady=0, sticky='ew')
 
-base_view_check = tk.Checkbutton(frame, text="基地", variable=base_view_var, anchor='w')
+base_view_check = tk.Checkbutton(frame, text="半场", variable=base_view_var, anchor='w')
 base_view_check.grid(row=1, column=1, padx=5, pady=0, sticky='ew')
 
-red_team_check = tk.Checkbutton(frame, text="红方", variable=red_team_var, anchor='w')
+red_team_check = tk.Checkbutton(frame, text="红方操作手", variable=red_team_var, anchor='w')
 red_team_check.grid(row=2, column=0, padx=5, pady=0, sticky='ew')
 
-blue_team_check = tk.Checkbutton(frame, text="蓝方", variable=blue_team_var, anchor='w')
+blue_team_check = tk.Checkbutton(frame, text="蓝方操作手", variable=blue_team_var, anchor='w')
 blue_team_check.grid(row=2, column=1, padx=5, pady=0, sticky='ew')
 
 download_button = tk.Button(frame, text="开始录制", command=start_stop_downloads)
