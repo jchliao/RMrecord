@@ -73,14 +73,14 @@ def update_json():
     data = download_json(live_game_info)
     event_list = data['eventData']
     has_live = any(event.get('liveState') == 1 for event in event_list)
-    data = data['eventData'][0]
-    # 组成新的 JSON 对象
-    new_data = {
-        'liveState': has_live,
-        'zoneLiveString': data['zoneLiveString'],
-        'fpvData': data['fpvData']
-    }
-    # 保存到文件
+    new_data = {}
+    for event in event_list:
+        if "Mainperspective-output" in str(event['zoneLiveString']):
+            new_data = {
+                'liveState': has_live,
+                'zoneLiveString': event['zoneLiveString'],
+                'fpvData': event['fpvData']
+            }
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
@@ -119,7 +119,7 @@ def file_list():
             files.append(('全场', src))
         for fpv in data['fpvData']:
             role = fpv['role']
-            if "半场" in role:
+            if "半场" in role or "号机" in role:
                 if base_view_var.get():
                     src = find_src_by_label(fpv['sources'], resolution)
                     files.append((role, src))
