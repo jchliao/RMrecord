@@ -11,7 +11,7 @@ import shutil
 
 if sys.platform == "win32":
     try:
-        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
     except Exception:
         pass
 
@@ -51,24 +51,23 @@ def download_json(url):
         return json.loads(response_data)
 
 def get_current_matche():
-    data = download_json(current_and_next_matches)
-    round_number = None
-    for item in data:
-        current_match = item.get("currentMatch")
-        if current_match:
-            order_number = current_match.get("orderNumber")
-            round_number = current_match.get("round")
-            blue_team = current_match["blueSide"]["player"]["team"]
-            red_team = current_match["redSide"]["player"]["team"]
-    if round_number is None:
+    try:
+        data = download_json(current_and_next_matches)
+        for item in data:
+            current_match = item.get("currentMatch")
+            if current_match is not None:
+                order_number = current_match.get("orderNumber")
+                round_number = current_match.get("round")
+                blue_team = current_match["blueSide"]["player"]["team"]
+                red_team = current_match["redSide"]["player"]["team"]
+    except:
         messagebox.showwarning('提示','当前可能没有进行中的比赛')
         return
     match_info = f"第{int(order_number):02}场.{red_team['collegeName']}.{red_team['name']}.vs.{blue_team['collegeName']}.{blue_team['name']}.第{round_number}局"
     match_info = match_info.replace('（', '(').replace('）', ')')
     text_entry.delete(0, tk.END)
     text_entry.insert(0, match_info)
-    text_entry.config(fg='black')
-    return
+    text_entry.config(foreground='black')
 
 def update_json():
     data = download_json(live_game_info)
@@ -213,7 +212,7 @@ menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
 menu_bar.add_command(label="更新 JSON", command=update_json)
 menu_bar.add_command(label="获取比赛信息", command=get_current_matche)
-frame = tk.Frame(root)
+frame = ttk.Frame(root)
 frame.grid(row=0, column=0, padx=28, pady=10,sticky='nsew')  # 使用 grid 布局
 
 # 创建下拉选择控件
@@ -226,33 +225,33 @@ red_team_var = tk.BooleanVar()
 blue_team_var = tk.BooleanVar()
 base_view_var = tk.BooleanVar()
 
-main_view_check = tk.Checkbutton(frame, text="全场", variable=main_view_var, anchor='w')
-main_view_check.grid(row=1, column=0, padx=5, pady=0, sticky='ew')
+main_view_check = ttk.Checkbutton(frame, text="全场", variable=main_view_var)
+main_view_check.grid(row=1, column=0, padx=8, pady=0, sticky='ew')
 
-base_view_check = tk.Checkbutton(frame, text="半场", variable=base_view_var, anchor='w')
-base_view_check.grid(row=1, column=1, padx=5, pady=0, sticky='ew')
+base_view_check = ttk.Checkbutton(frame, text="半场", variable=base_view_var)
+base_view_check.grid(row=1, column=1, padx=8, pady=0, sticky='ew')
 
-red_team_check = tk.Checkbutton(frame, text="红方操作手", variable=red_team_var, anchor='w')
-red_team_check.grid(row=2, column=0, padx=5, pady=0, sticky='ew')
+red_team_check = ttk.Checkbutton(frame, text="红方操作手", variable=red_team_var)
+red_team_check.grid(row=2, column=0, padx=8, pady=0, sticky='ew')
 
-blue_team_check = tk.Checkbutton(frame, text="蓝方操作手", variable=blue_team_var, anchor='w')
-blue_team_check.grid(row=2, column=1, padx=5, pady=0, sticky='ew')
+blue_team_check = ttk.Checkbutton(frame, text="蓝方操作手", variable=blue_team_var)
+blue_team_check.grid(row=2, column=1, padx=8, pady=0, sticky='ew')
 
-download_button = tk.Button(frame, text="开始录制", command=start_stop_downloads)
+download_button = ttk.Button(frame, text="开始录制", command=start_stop_downloads)
 download_button.grid(row=3, column=0, columnspan=2,padx=10,pady=10, sticky='ew')
 
 def on_entry_focus_in(event):
     if text_entry.get() == hint_text:
         text_entry.delete(0, tk.END)
-        text_entry.config(fg='black')
+        text_entry.config(foreground='black')
 
 def on_entry_focus_out(event):
     if text_entry.get() == "":
         text_entry.insert(0, hint_text)
-        text_entry.config(fg='grey')
+        text_entry.config(foreground='grey')
 
 # 添加单行文本框
-text_entry = tk.Entry(frame, fg='grey')
+text_entry = ttk.Entry(frame, foreground='grey')
 text_entry.insert(0, hint_text)
 text_entry.bind("<FocusIn>", on_entry_focus_in)
 text_entry.bind("<FocusOut>", on_entry_focus_out)

@@ -4,6 +4,8 @@
 python record.py
 ```
 
+![](https://cdn.nlark.com/yuque/0/2025/png/26139354/1747746252512-7acb43e6-a59a-4463-8d09-6dacca491451.png)
+
 ## 录制
 
 - (可选)获取比赛信息
