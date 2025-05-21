@@ -60,27 +60,36 @@ def get_current_matche():
                 round_number = current_match.get("round")
                 blue_team = current_match["blueSide"]["player"]["team"]
                 red_team = current_match["redSide"]["player"]["team"]
+        match_info = f"第{int(order_number):02}场.{red_team['collegeName']}.{red_team['name']}.vs.{blue_team['collegeName']}.{blue_team['name']}.第{round_number}局"
+        match_info = match_info.replace('（', '(').replace('）', ')')
+        text_entry.delete(0, tk.END)
+        text_entry.insert(0, match_info)
+        text_entry.config(foreground='black')
     except:
         messagebox.showwarning('提示','当前可能没有进行中的比赛')
         return
-    match_info = f"第{int(order_number):02}场.{red_team['collegeName']}.{red_team['name']}.vs.{blue_team['collegeName']}.{blue_team['name']}.第{round_number}局"
-    match_info = match_info.replace('（', '(').replace('）', ')')
-    text_entry.delete(0, tk.END)
-    text_entry.insert(0, match_info)
-    text_entry.config(foreground='black')
 
 def update_json():
     data = download_json(live_game_info)
     event_list = data['eventData']
-    has_live = any(event.get('liveState') == 1 for event in event_list)
-    new_data = {}
+    event = event_list[0]
+    new_data = {
+        "zoneName":event.get("zoneName"),
+        'liveState': event.get('liveState'),
+        'zoneLiveString': event.get('zoneLiveString'),
+        'fpvData': event.get('fpvData'),
+    }
+    today_str = datetime.now().strftime('%Y-%m-%d')
     for event in event_list:
-        if "Mainperspective-output" in str(event['zoneLiveString']):
+        zone_dates = event.get('zoneDate', [])
+        if today_str in zone_dates:
             new_data = {
-                'liveState': has_live,
-                'zoneLiveString': event['zoneLiveString'],
-                'fpvData': event['fpvData']
+                "zoneName":event.get("zoneName"),
+                'liveState': event.get('liveState'),
+                'zoneLiveString': event.get('zoneLiveString'),
+                'fpvData': event.get('fpvData'),
             }
+            break
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(new_data, f, ensure_ascii=False, indent=4)
 
