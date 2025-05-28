@@ -11,12 +11,14 @@ jobs:
     runs-on: windows-latest
     permissions:
       contents: write
+    env:
+      VERSION: ${{ github.ref_name }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.13'
 
@@ -29,19 +31,20 @@ jobs:
           --add-data '.\\icon.ico;.' `
           --add-data '.\\bin\\*;.\\bin' `
           -i '.\\icon.ico' record.py
-        move dist\\record.exe dist\\record-full.exe
+        move dist\record.exe dist\record-%VERSION%-full.exe
 
     - name: Build minimal version
       run: |
         pyinstaller -w -F `
           --add-data '.\\icon.ico;.' `
           -i '.\\icon.ico' record.py
+        move dist\record.exe dist\record-%VERSION%.exe
 
     - name: Upload to Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
-          dist/record.exe
-          dist/record-full.exe
+          dist/record-%VERSION%.exe
+          dist/record-%VERSION%-full.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
