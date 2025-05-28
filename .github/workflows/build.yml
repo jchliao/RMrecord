@@ -3,13 +3,14 @@ name: Build and Release Executables
 on:
   push:
     tags:
-      - 'v*'  # 只有打 tag 的提交才触发，例如 v1.0.0
+      - 'v*'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
-
+    permissions:
+      contents: write
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -17,29 +18,25 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'
+        python-version: '3.13'
 
     - name: Install PyInstaller
       run: pip install pyinstaller
 
-    # ⬛ 1. Build "record.exe" (no bin)
-    - name: Build minimal version
-      run: |
-        pyinstaller -w -F ^
-          --add-data ".\\icon.ico;." ^
-          -i .\icon.ico record.py
-        move dist\\record.exe dist\\record.exe
-
-    # ⬛ 2. Build "record-full.exe" (with bin)
     - name: Build full version
       run: |
-        pyinstaller -w -F ^
-          --add-data ".\\icon.ico;." ^
-          --add-data ".\\bin\\*;.\\bin" ^
-          -i .\icon.ico record.py
+        pyinstaller -w -F `
+          --add-data '.\\icon.ico;.' `
+          --add-data '.\\bin\\*;.\\bin' `
+          -i '.\\icon.ico' record.py
         move dist\\record.exe dist\\record-full.exe
 
-    # ✅ Upload to GitHub Release
+    - name: Build minimal version
+      run: |
+        pyinstaller -w -F `
+          --add-data '.\\icon.ico;.' `
+          -i '.\\icon.ico' record.py
+
     - name: Upload to Release
       uses: softprops/action-gh-release@v1
       with:
