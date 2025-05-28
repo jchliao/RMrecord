@@ -31,20 +31,20 @@ jobs:
           --add-data '.\\icon.ico;.' `
           --add-data '.\\bin\\*;.\\bin' `
           -i '.\\icon.ico' record.py
-        move dist\record.exe dist\record-%VERSION%-full.exe
+        move dist\record.exe dist\record-$env:VERSION-full.exe
 
     - name: Build minimal version
       run: |
         pyinstaller -w -F `
           --add-data '.\\icon.ico;.' `
           -i '.\\icon.ico' record.py
-        move dist\record.exe dist\record-%VERSION%.exe
+        move dist\record.exe dist\record-$env:VERSION.exe
 
     - name: Upload to Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          dist/record-%VERSION%.exe
-          dist/record-%VERSION%-full.exe
+          dist/record-${{ env.VERSION }}.exe
+          dist/record-${{ env.VERSION }}-full.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
