@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import threading
 import subprocess
 import os
 import sys
@@ -15,9 +16,9 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-hint_text = "文件前缀"
-live_game_info = "https://rm-static.djicdn.com/live_json/live_game_info.json"
-current_and_next_matches = (
+HINT_TEXT = "文件前缀"
+LIVE_GAME_INFO_URL = "https://rm-static.djicdn.com/live_json/live_game_info.json"
+CURRENT_MATCHE_URL = (
     "https://rm-static.djicdn.com/live_json/current_and_next_matches.json"
 )
 
@@ -56,9 +57,9 @@ def download_json(url):
         return json.loads(response_data)
 
 
-def get_current_matche():
+def get_current_match():
     try:
-        data = download_json(current_and_next_matches)
+        data = download_json(CURRENT_MATCHE_URL)
         for item in data:
             current_match = item.get("currentMatch")
             if current_match is not None:
@@ -66,7 +67,15 @@ def get_current_matche():
                 round_number = current_match.get("round")
                 blue_team = current_match["blueSide"]["player"]["team"]
                 red_team = current_match["redSide"]["player"]["team"]
-        match_info = f"第{int(order_number):02}场.{red_team['collegeName']}.{red_team['name']}.vs.{blue_team['collegeName']}.{blue_team['name']}.第{round_number}局"
+        match_info = (
+                f"第{int(order_number):02}场."
+                f"{red_team['collegeName']}."
+                f"{red_team['name']}."
+                f"vs."
+                f"{blue_team['collegeName']}."
+                f"{blue_team['name']}."
+                f"第{round_number}局"
+            )
         match_info = match_info.replace("（", "(").replace("）", ")")
         text_entry.delete(0, tk.END)
         text_entry.insert(0, match_info)
@@ -77,7 +86,7 @@ def get_current_matche():
 
 
 def get_live_game_info():
-    data = download_json(live_game_info)
+    data = download_json(LIVE_GAME_INFO_URL)
     event_list = data["eventData"]
     event = None
     today_str = datetime.now().strftime("%Y-%m-%d")
@@ -109,16 +118,22 @@ def update_json(event=None):
         )
 
 
-if not os.path.exists(json_path):
-    update_json()
-else:
-    with open(json_path, "r", encoding="utf-8") as f:
-        local_data = json.load(f)
-    local_zone_name = local_data.get("zoneName")
-    event = get_live_game_info()
-    if local_zone_name != event.get("zoneName"):
-        update_json(event)
+def check_and_update_json():
+    try:
+        if not os.path.exists(json_path):
+            update_json()
+        else:
+            with open(json_path, "r", encoding="utf-8") as f:
+                local_data = json.load(f)
+            local_zone_name = local_data.get("zoneName",[])
+            event = get_live_game_info()
+            if local_zone_name != event.get("zoneName"):
+                update_json(event)
+    except Exception as e:
+        print(f"初始化 JSON 检查失败: {e}")
 
+
+threading.Thread(target=check_and_update_json, daemon=True).start()
 
 # 下载任务列表
 processes = []
@@ -149,21 +164,21 @@ def file_list():
     resolution = resolution_combobox.get()
     with open(json_path, "r", encoding="utf-8") as file:
         data = json.load(file)
-        zonelive = data["zoneLiveString"]
-        src = find_src_by_label(zonelive, resolution)
-        if main_view_var.get():
-            files.append(("全场", src))
-        for fpv in data["fpvData"]:
-            role = fpv["role"]
-            if "红" in role:
-                if red_team_var.get():
-                    files.append((role, src))
-            elif "蓝" in role:
-                if blue_team_var.get():
-                    files.append((role, src))
-            else:
-                if others_view_var.get():
-                    files.append((role, src))
+    zonelive = data["zoneLiveString"]
+    src = find_src_by_label(zonelive, resolution)
+    if main_view_var.get():
+        files.append(("全场", src))
+    for fpv in data["fpvData"]:
+        role = fpv["role"]
+        if "红" in role:
+            if red_team_var.get():
+                files.append((role, src))
+        elif "蓝" in role:
+            if blue_team_var.get():
+                files.append((role, src))
+        else:
+            if others_view_var.get():
+                files.append((role, src))
     return files
 
 
@@ -185,7 +200,7 @@ def start_downloads():
 
     # 设置录制文件前缀
     game_info = text_entry.get()
-    if game_info == hint_text:
+    if game_info == HINT_TEXT:
         game_info = ""
     if game_info != "":
         dirmane = game_info.split(".")[0]
@@ -260,7 +275,7 @@ root.grid_columnconfigure(0, weight=1)
 menu_bar = tk.Menu(root)
 root.config(menu=menu_bar)
 menu_bar.add_command(label="更新 JSON", command=update_json)
-menu_bar.add_command(label="获取比赛信息", command=get_current_matche)
+menu_bar.add_command(label="获取比赛信息", command=get_current_match)
 frame = ttk.Frame(root)
 frame.grid(row=0, column=0, padx=28, pady=10, sticky="nsew")  # 使用 grid 布局
 
@@ -291,20 +306,20 @@ download_button.grid(row=3, column=0, columnspan=2, padx=10, pady=10, sticky="ew
 
 
 def on_entry_focus_in(event):
-    if text_entry.get() == hint_text:
+    if text_entry.get() == HINT_TEXT:
         text_entry.delete(0, tk.END)
         text_entry.config(foreground="black")
 
 
 def on_entry_focus_out(event):
     if text_entry.get() == "":
-        text_entry.insert(0, hint_text)
+        text_entry.insert(0, HINT_TEXT)
         text_entry.config(foreground="grey")
 
 
 # 添加单行文本框
 text_entry = ttk.Entry(frame, foreground="grey")
-text_entry.insert(0, hint_text)
+text_entry.insert(0, HINT_TEXT)
 text_entry.bind("<FocusIn>", on_entry_focus_in)
 text_entry.bind("<FocusOut>", on_entry_focus_out)
 text_entry.grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
@@ -312,6 +327,7 @@ text_entry.grid(row=4, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 # 设置窗口关闭时的处理函数
 root.protocol("WM_DELETE_WINDOW", on_closing)
 center_window(root)
+root.update_idletasks()
 root.deiconify()
 # 启动主循环
 root.mainloop()
