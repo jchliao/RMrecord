@@ -1,12 +1,16 @@
 <div align="center">
-  <img width="180" src="https://cdn.jsdelivr.net/gh/jchliao/RMrecord/icon.ico" alt="logo">
+  <img width="180" src="https://cdn.jsdelivr.net/gh/jchliao/RMrecord/assets/icon.ico" alt="logo">
 </div>
 
 <h1 align="center">RMrecord</h1>
 
 <p align="center">🎬 一个用于录制 RoboMaster 比赛多视角直播的轻量级工具 🎥</p>
 
-# 🚀快速开始
+# 📘 项目简介
+
+RMrecord 会根据比赛直播数据自动识别可录制的视角，并调用 ffmpeg 进行后台录制。支持按赛区选择、按清晰度选择，以及为输出文件添加自定义前缀。
+
+# 🚀 快速开始
 
 ## 运行程序
 
@@ -22,49 +26,79 @@ python record.py
 
 # 📘 使用说明
 
-## 更新JSON
+## 选择赛区
 
-点击菜单栏中的 **“更新JSON”**，程序会自动拉取当前比赛的直播数据。
+启动后会自动读取赛区列表。选择赛区后，程序会刷新对应的直播数据，并更新当前可用的录制视角。
 
 ## 获取比赛信息
 
-点击菜单栏中的 **“获取比赛信息”**，程序会自动拉取当前比赛信息并填入前缀输入框。
+点击菜单栏中的 **“获取比赛信息”**，程序会自动拉取当前进行中的比赛信息，并把“第xx场.学校简称.战队名.vs.学校简称.战队名.第x局”填入文件前缀输入框。
 
 ## 选择清晰度
 
-通过下拉框选择所需清晰度：
+支持以下清晰度：
 
 - 540p
 - 720p
 - 1080p
 
+默认值是 720p。
+
 ## 选择录制视角
+
+界面会根据当前直播数据自动启用或禁用可用视角。可录制项包括：
 
 勾选需要录制的视角：
 
-- ✅ **全场**：全场机位视角
-- ✅ **半场**：补充机位视角
-- ✅ **红方操作手**：红方操作手视角
-- ✅ **蓝方操作手**：蓝方操作手视角
+- 全场：主画面直播流
+- 其他：补充机位或其它可用画面
+- 红方操作手：红方 FPV 视角
+- 蓝方操作手：蓝方 FPV 视角
 
 ## 开始/停止录制
 
-点击 “开始录制” 后，程序会创建输出目录并开始后台录制。按钮文字变为 “停止录制”，再次点击将结束所有录制任务。
+点击“开始录制”后，程序会在项目目录下创建 output 文件夹，并按当前时间或自定义前缀生成子目录。按钮会切换为“停止录制”，再次点击即可结束所有录制任务。
 
 ## 自定义文件前缀
 
-录制前可在文本框中输入自定义文件名前缀。
+可在底部输入框中填写文件前缀。
+
+如果前缀中包含英文句点，程序会把当前赛区名称拼接到前缀前面，再生成输出目录和视频文件名。
 
 ## 输出文件结构
 
-录制的视频文件将保存在 output 文件夹中，以比自定义文件前缀或时间戳命名。
+录制文件会保存为 mp4，命名格式大致如下：
 
-# 📦打包
+```text
+output/20260513_123456/前缀_全场.mp4
+output/20260513_123456/前缀_红方操作手.mp4
+```
+
+如果同名目录已存在，程序会自动追加序号避免覆盖。
+
+# 📦 打包
+
+项目提供了一个打包脚本 [build.py](build.py)。在 Windows 下可以直接运行：
 
 ```bash
-python -m venv venv
-.\venv\Scripts\activate
-pip install pyinstaller
-pyinstaller -w -F --add-data ".\\icon.ico;." --add-data ".\\bin\\*;.\\bin" -i .\icon.ico record.py
+python build.py
 ```
+
+可选参数：
+
+- `--withffmpeg`：把 [bin](bin) 目录中的 ffmpeg 一起打包进去
+- `--withupx`：使用 UPX 压缩可执行文件
+
+示例：
+
+```bash
+python build.py --withffmpeg --withupx
+```
+
+# 📁 目录说明
+
+- [record.py](record.py)：主程序
+- [build.py](build.py)：打包脚本
+- [assets/team_names.json](assets/team_names.json)：学校简称映射
+- [bin](bin)：本地 ffmpeg 依赖
 
