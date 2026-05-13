@@ -20,7 +20,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: '3.12'
 
     - name: Install PyInstaller
       run: pip install pyinstaller
@@ -28,16 +28,16 @@ jobs:
     - name: Build full version
       run: |
         pyinstaller -w -F `
-          --add-data '.\\icon.ico;.' `
-          --add-data '.\\bin\\*;.\\bin' `
-          -i '.\\icon.ico' record.py
+          --add-data "assets;assets" `
+          --add-data "bin;bin" `
+          -i "assets/icon.ico" record.py
         move dist\record.exe dist\record-$env:VERSION-full.exe
 
     - name: Build minimal version
       run: |
         pyinstaller -w -F `
-          --add-data '.\\icon.ico;.' `
-          -i '.\\icon.ico' record.py
+          --add-data "assets;assets" `
+          -i "assets/icon.ico" record.py
         move dist\record.exe dist\record-$env:VERSION.exe
 
     - name: Upload to Release

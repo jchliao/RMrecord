@@ -1,0 +1,10 @@
+dist/
+*.pyc
+*.bak
+*.log
+.venv
+__pycache__
+*.lock
+/_*.py
+output/
+live_data.json
