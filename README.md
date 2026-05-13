@@ -1,7 +1,3 @@
-<div align="center">
-  <img width="180" src="https://cdn.jsdelivr.net/gh/jchliao/RMrecord/assets/icon.ico" alt="logo">
-</div>
-
 <h1 align="center">RMrecord</h1>
 
 <p align="center">🎬 一个用于录制 RoboMaster 比赛多视角直播的轻量级工具 🎥</p>
@@ -19,10 +15,6 @@ RMrecord 会根据比赛直播数据自动识别可录制的视角，并调用 f
 ```bash
 python record.py
 ```
-
-<p align="center">
-  <img src="https://cdn.nlark.com/yuque/0/2025/png/26139354/1747746252512-7acb43e6-a59a-4463-8d09-6dacca491451.png">
-</p>
 
 # 📘 使用说明
 
